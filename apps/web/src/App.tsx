@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { useVoice } from "./hooks/useVoice";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [socket] = useState(() => new WebSocket("ws://localhost:3001"));
+  const [transcript, setTranscript] = useState("");
+
+  const { startRecording, stopRecording } = useVoice();
+
+  useEffect(() => {
+    socket.onopen = () => {
+      console.log("WebSocket connected");
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data.toString());
+        if (data.event === "partial_transcript" || data.event === "committed_transcript" || data.event === "committed_transcript_with_timestamps") {
+          const payload = data.payload || {};
+          const text = payload.text ?? payload.transcript ?? payload?.result ?? JSON.stringify(payload);
+          setTranscript(text);
+        }
+      } catch (error) {
+        console.error("Failed to parse socket message", error);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error", error);
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket closed");
+    };
+  }, [socket]);
 
   return (
-    <>
+    <div>
+      <button
+        onClick={async () =>
+          await startRecording(socket)
+        }
+      >
+        Start Recording
+      </button>
+
+      <button onClick={() => stopRecording(socket)}>
+        Stop Recording
+      </button>
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h2>Transcript</h2>
+        <p>{transcript}</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

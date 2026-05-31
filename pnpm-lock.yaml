@@ -7,7 +7,23 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@elevenlabs/elevenlabs-js':
+        specifier: ^2.49.1
+        version: 2.49.1
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
     devDependencies:
+      '@types/react':
+        specifier: 19.2.2
+        version: 19.2.2
+      '@types/react-dom':
+        specifier: 19.2.2
+        version: 19.2.2(@types/react@19.2.2)
+      '@types/ws':
+        specifier: ^8.18.1
+        version: 8.18.1
       turbo:
         specifier: ^2.9.16
         version: 2.9.16
@@ -17,6 +33,9 @@ importers:
       '@prisma/client':
         specifier: ^7.8.0
         version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@6.0.3))(typescript@6.0.3)
+      '@repo/websocket':
+        specifier: workspace:*
+        version: link:../../packages/websocket
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -87,6 +106,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@repo/audio-core':
+        specifier: workspace:*
+        version: link:../../packages/audio-core
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -100,6 +122,10 @@ importers:
       vite:
         specifier: ^5.0.0
         version: 5.4.21(@types/node@22.15.3)
+
+  packages/audio-core: {}
+
+  packages/elevenlabs-client: {}
 
   packages/eslint-config:
     devDependencies:
@@ -169,6 +195,8 @@ importers:
       typescript:
         specifier: 5.9.2
         version: 5.9.2
+
+  packages/websocket: {}
 
 packages:
 
@@ -268,6 +296,10 @@ packages:
 
   '@electric-sql/pglite@0.4.1':
     resolution: {integrity: sha512-mZ9NzzUSYPOCnxHH1oAHPRzoMFJHY472raDKwXl/+6oPbpdJ7g8LsCN4FSaIIfkiCKHhb3iF/Zqo3NYxaIhU7Q==}
+
+  '@elevenlabs/elevenlabs-js@2.49.1':
+    resolution: {integrity: sha512-ctwKJaF+ZU3auuuVQK/UBYz5Qev1pqDrnV+BktM+vRvtyt9s1vJvHydCODuj9/uObp8BST2+a5/zu1uShd+ryQ==}
+    engines: {node: '>=18.0.0'}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -2994,6 +3026,16 @@ snapshots:
       '@electric-sql/pglite': 0.4.1
 
   '@electric-sql/pglite@0.4.1': {}
+
+  '@elevenlabs/elevenlabs-js@2.49.1':
+    dependencies:
+      command-exists: 1.2.9
+      node-fetch: 2.7.0
+      ws: 8.21.0
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
